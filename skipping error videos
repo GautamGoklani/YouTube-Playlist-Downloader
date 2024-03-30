@@ -1,0 +1,26 @@
+from pytube import Playlist
+import os
+
+def download_playlist(playlist_url, output_path):
+    playlist = Playlist(playlist_url)
+
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+
+    for video in playlist.videos:
+        print(f"Downloading: {video.title}")
+        try:
+            video.streams.get_highest_resolution().download(output_path)
+            print("Download completed.")
+        except Exception as e:
+            print(f"Error downloading video: {e}")
+            print("Skipping to the next video...")
+            continue
+
+    print("Playlist download completed.")
+
+if __name__ == "__main__":
+    playlist_url = "https://youtube.com/playlist?list=PLZw-TtLD0-PbneOi6f8a_KdU3b3eiAypT&feature=shared"
+    output_path = r"D:\Youtube\002"
+
+    download_playlist(playlist_url, output_path)
